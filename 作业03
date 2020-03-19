@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #fs {
+            width: 800px;
+            height: 250px;
+            border-width: 3px;
+        }
+        
+        #fs legend {
+            color: red;
+            font-size: 50px;
+            font-weight: bold;
+        }
+        
+        ul {
+            width: 780px;
+            height: 50px;
+            margin: 23px auto;
+            border: 1px solid gray;
+            list-style: none;
+            padding: 0%;
+        }
+        
+        li {
+            width: 24px;
+            height: 24px;
+            float: left;
+            margin: 13px 10px;
+        }
+        
+        #show {
+            width: 750px;
+            height: 70px;
+            margin: 0 auto;
+            background-color: rgb(199, 194, 194);
+            line-height: 1.5;
+            font-size: 21.9px;
+        }
+    </style>
+</head>
+
+<body>
+    <fieldset id="fs">
+        <legend>网页换肤</legend>
+        <ul>
+            <li style="background-color: rgb(199, 194, 194);"></li>
+            <li style="background-color: rgb(169, 128, 199);"></li>
+            <li style="background-color: rgb(236, 199, 199);"></li>
+            <li style="background-color: rgb(140, 200, 240);"></li>
+            <li style="background-color: rgb(233, 232, 180);"></li>
+            <li style="background-color: rgb(194, 241, 147);"></li>
+        </ul>
+        <div id="show">
+            LocalStorage将数据保存在客户端本地的硬件设备中，即使浏览器被关闭了，该数据依然存在，下次打开浏览器访问网站时仍然可以继续使用。
+        </div>
+    </fieldset>
+</body>
+<script>
+    var sColor = document.getElementsByTagName("li");
+    // console.log(sColor);
+    var show = document.getElementById("show");
+    var storage = window.localStorage;
+    console.log(storage);
+    if (storage.getItem("color1") == null) {
+        show.style.backgroundColor = getStyle(sColor[0], "backgroundColor");
+        sColor[0].style.margin = 10 + "px " + 10 + "px";
+    } else {
+        show.style.backgroundColor = storage.getItem("color1");
+        var n = storage.getItem("num");
+        console.log(n);
+        console.log(sColor[n].style.margin);
+        sColor[n].style.margin = 10 + "px " + 10 + "px";
+    }
+
+    for (var i = 0; i < sColor.length; i++) {
+        ! function(i) {
+            sColor[i].onclick = function() {
+                // show.style.backgroundColor = window.getComputedStyle(sColor[i], null).backgroundColor;
+                if (!window.localStorage) {
+                    console.log("该浏览器不支持localStorage!")
+                } else {
+                    var nowColor = getStyle(sColor[i], "backgroundColor");
+                    storage.setItem("color1", nowColor);
+                    storage.setItem("num", i);
+                }
+                show.style.backgroundColor = storage.getItem("color1");
+                for (var j = 0; j < sColor.length; j++) {
+                    if (j == i) {
+                        sColor[j].style.margin = 10 + "px " + 10 + "px";
+                    } else {
+                        sColor[j].style.margin = 13 + "px " + 10 + "px";
+                    }
+                }
+
+            }
+        }(i);
+
+    }
+
+    function getStyle(object, style) {
+        if (object.currentStyle) {
+            return object.currentStyle[style];
+        } else {
+            return getComputedStyle(object, null)[style];
+        }
+    }
+</script>
+
+</html>
